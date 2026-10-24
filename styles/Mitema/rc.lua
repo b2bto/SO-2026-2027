@@ -22,7 +22,9 @@ require("bar")
 -- importar para cargar lo comandos de tecla global
 require("keys")
 -- NOTA COLOCAR LA RUTA DEL LA IMAGEN /home/{usario}/.config/awesome/wallpaper/Ruka Sarashina.jpg"
-url_wallpaper = "/home/liun1x/.config/awesome/wallpaper/54333-pc.jpg"
+local config_dir = gears.filesystem.get_configuration_dir()
+
+url_wallpaper = config_dir .. "wallpaper/54333-pc.jpg"
 -- {{{ Manejo de errores
 -- Compruebe si Awesome encontró un error durante el inicio y volvió a
 -- otra configuración (Este código solo se ejecutará para la configuración alternativa)
@@ -220,9 +222,9 @@ awful.rules.rules = { --- Todos los clientes coincidirán con esta regla.
     -- propiedades de la nueva ventana
     rule = {},
     properties = {
-        border_color = color_yellow_one,
+        border_color = color_azul_one,
         focus = awful.client.focus.filter,
-        border_width = "4",
+        border_width = 2,
         raise = true,
         keys = clientkeys,
         buttons = clientbuttons,
@@ -313,11 +315,22 @@ client.connect_signal("unfocus", function(c)
     c.border_color = color_black
 end)
 -- }}}
+
+-- Aplicaciones de inicio
 -- aplicaciones de ejecucion al inicio del entorno
-awful.util.spawn("picom")--tranparencia
-awful.spawn.with_shell("/usr/lib/polkit-kde-authentication-agent-1 &")--lanzador de ventana para permisos
-awful.spawn.with_shell("mpd &")--cargar configuracion de reproductor
---awful.spawn.with_shell("/usr/bin/pipewire &")--controlador de audio
---awful.spawn.with_shell("/usr/bin/pipewire-pulse &")--controlador de audio
---color del listado aplicaciones de segundo plano
+
+local function run_once(process, command)
+    awful.spawn.with_shell(
+        "pgrep -x '" .. process ..
+        "' >/dev/null || " .. command
+    )
+end
+
+-- Compositor: transparencias y sombras
+run_once("picom", "picom")
+
+-- Reproductor de música
+run_once("mpd", "mpd")
+
+-- Color de fondo de la bandeja del sistema
 beautiful.bg_systray = color_morado_one
