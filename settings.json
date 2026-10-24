@@ -1,0 +1,157 @@
+//{
+//    "workbench.colorTheme": "GitHub Dark Colorblind (Beta)",
+//    "workbench.iconTheme": "vscode-icons",
+//    "workbench.editor.editorActionsLocation": "titleBar"
+//}
+{
+    "explorer.fileNesting.enabled": true, // permitir navegación de directorios anidados
+    "editor.folding": false,
+    "editor.minimap.enabled": false, // desactivar minimapa
+    "editor.renderWhitespace": "all", // mostrar espacios en blanco
+    "editor.wordWrap": "on", // ajustar texto
+    "editor.tabSize": 2, // tamaño de tabulación
+    "terminal.integrated.fontSize": 16, // Tamaño de fuente de terminal
+    "terminal.integrated.fontFamily": "JetBrainsMono Nerd Font", // Familia de la fuente
+    "editor.fontLigatures": true, // ligaduras
+    "editor.cursorStyle": "block", // Estilo del cursor: línea delgada
+    "editor.cursorBlinking": "blink", // Animación del cursor
+    "editor.guides.highlightActiveIndentation": "always", // resaltar indentación activa
+    "editor.lineHeight": 1.8, // Altura de línea
+    "files.trimFinalNewlines": true, // quitar nuevas lineas
+    "editor.suggestSelection": "first", // seleccionar primera sugerencia
+    "breadcrumbs.enabled": false, // Deshabilita las rutas de navegación
+    "javascript.validate.enable": true, // Deshabilita la validación de JS
+    "workbench.startupEditor": "none", // Deshabilita la barra de actividades
+    "window.menuBarVisibility": "toggle", // Deshabilita la barra de menú
+    "editor.glyphMargin": false, // Deshabilita los símbolos de la línea de código (Glyph Margin)
+    "editor.inlineSuggest.enabled": true, // habilita sugerencias
+    "editor.bracketPairColorization.enabled": true, // habilita coloreado de paréntesis
+    "editor.guides.bracketPairs": true, // habilita guías de paréntesis
+    "editor.guides.bracketPairsHorizontal": true, // habilita guías de paréntesis horizontal
+    "editor.guides.highlightActiveBracketPair": true,
+    "explorer.sortOrder": "type", // ordena el explorer por type
+    "editor.formatOnPaste": true, // Formatea el código al pegarlo
+    "editor.formatOnType": true, // Formatea una línea después de escribirla
+    "editor.formatOnSave": true, // Formatea el código al guardar
+    "editor.linkedEditing": true, // habilita edición enlazada
+    "workbench.editor.tabCloseButton": "off", // Remueve el icono para cerrar pestañas
+    "timeline.excludeSources": [], // Excluye los archivos de la línea de tiempo
+    "files.exclude": { // archivos excluidos
+      "**/.git": true,
+      "**/.svn": true,
+      "**/.hg": true,
+      "**/CVS": true,
+      "**/.DS_Store": true,
+      "**/Thumbs.db": true,
+      ".vscode": true,
+      "node_modules": true,
+      "package-lock.json": true,
+      "yarn.lock": true
+    },
+    "search.exclude": { // archivos excluidos de la busqueda
+      ".git": true,
+      ".vscode": true,
+      ".yarn": true,
+      "build": true,
+      "dist": true,
+      "node_modules": true,
+      "types": true,
+      ".pnp.cjs": true,
+      ".pnp.js": true,
+      ".pnp.mjs": true,
+      "package-lock.json": true,
+      "yarn.lock": true
+    }, // Deshabilita la barra de estado
+    "explorer.confirmDragAndDrop": false, // Deshabilita la confirmación al arrastrar y soltar
+    "explorer.confirmDelete": false, // Deshabilita la confirmación al eliminar
+    "workbench.editor.enablePreviewFromQuickOpen": false, // Deshabilita la vista previa de los archivos
+    "workbench.editor.wrapTabs": false, // Deshabilita el ajuste de pestañas
+    "window.confirmBeforeClose": "always", // Habilita la confirmación al cerrar
+    "workbench.editor.enablePreview": false, // Deshabilita la vista previa de los archivos
+    "extensions.ignoreRecommendations": true, // Deshabilita las recomendaciones de extensiones
+    "editor.fontFamily": "'JetBrainsMono Nerd Font'", // Fuente de la línea de código
+    "editor.fontSize": 16, // tamaño de fuente del editor
+    "telemetry.telemetryLevel": "off", // Deshabilita la telemetría de VS Code
+    "settingsSync.keybindingsPerPlatform": false, // Deshabilita la sincronización de teclas de acceso rápido
+    "editor.suggest.showSnippets": false, // ver snippets eliminado
+    "editor.snippetSuggestions": "none", // eliminar sugerencia de snippets
+    "editor.suggest.snippetsPreventQuickSuggestions": false, // eliminar sugerencia de snippets en el editor
+    "javascript.updateImportsOnFileMove.enabled": "always", // habilita el movimiento de archivos de JS
+    "javascript.suggest.completeFunctionCalls": true, // habilita la autocompletación de llamadas de funciones
+    "typescript.suggest.completeFunctionCalls": true, // habilita la autocompletación de llamadas de funciones
+    "editor.suggest.preview": true, // habilita la vista previa de los archivos
+    "javascript.referencesCodeLens.enabled": true,
+    "javascript.referencesCodeLens.showOnAllFunctions": true,
+    "typescript.implementationsCodeLens.enabled": true,
+    "typescript.referencesCodeLens.enabled": true,
+    "typescript.referencesCodeLens.showOnAllFunctions": true,
+    "diffEditor.codeLens": true, // habilita los códigos lens en el diff editor
+    "editor.codeLensFontSize": 16, // tamaño de fuente de los códigos lens
+    "emmet.includeLanguages": {
+      "javascript": "javascriptreact" // usar emmet dentro de JSX
+    },
+    "workbench.statusBar.visible": false, // Deshabilita la barra de estado
+    "typescript.format.enable": true, // habilita el formato de TS
+    "typescript.suggest.autoImports": true, // habilita la autocompletación de imports
+    "typescript.format.insertSpaceAfterConstructor": true, // insertar espacio después de los constructores de TS
+    "typescript.format.insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces": true, // insertar espacio después de los corchetes de JSX
+    "workbench.editor.showTabs": "none", // deshabilita las pestañas
+    "workbench.activityBar.location": "hidden", // deshabilita la barra de actividades
+    "zenMode.showTabs": "none", // deshabilita las pestañas en el modo zen
+    "editor.lineNumbers": "relative", // números de línea relativos
+    "workbench.editor.tabActionCloseVisibility": false, // deshabilita el icono de cerrar pestañas
+    "editor.inlayHints.enabled": "onUnlessPressed", // habilita las sugerencias de inlay hints
+    "typescript.inlayHints.parameterNames.enabled": "all", // habilita los nombres de parámetros en los hints
+    "editor.inlayHints.fontSize": 10, // tamaño de fuente de los hints
+    "go.inlayHints.assignVariableTypes": true,
+    "go.inlayHints.compositeLiteralFields": true,
+    "go.inlayHints.compositeLiteralTypes": true,
+    "go.inlayHints.constantValues": true,
+    "go.inlayHints.functionTypeParameters": true,
+    "go.inlayHints.parameterNames": true,
+    "go.inlayHints.rangeVariableTypes": true,
+    "editor.inlayHints.padding": true,
+    "javascript.inlayHints.parameterNames.suppressWhenArgumentMatchesName": true,
+    "javascript.inlayHints.variableTypes.suppressWhenTypeMatchesName": true,
+    "typescript.inlayHints.parameterNames.suppressWhenArgumentMatchesName": true,
+    "typescript.inlayHints.functionLikeReturnTypes.enabled": true, // Habilita los tipos de retorno en typescript
+    "javascript.inlayHints.functionLikeReturnTypes.enabled": true, // habilita sugerencias de tipos de retorno
+    "typescript.inlayHints.variableTypes.suppressWhenTypeMatchesName": true,
+    "javascript.inlayHints.enumMemberValues.enabled": true, // habilita los valores de los enumerados en los hints
+    "javascript.inlayHints.parameterNames.enabled": "all", // habilita los nombres de parámetros en los hints
+    "javascript.inlayHints.parameterTypes.enabled": true, // habilita los tipos de parámetros en los hints
+    "javascript.inlayHints.propertyDeclarationTypes.enabled": true, // habilita los tipos de propiedades en los hints
+    "javascript.inlayHints.variableTypes.enabled": true, // habilita los tipos de variables en los hints
+    "typescript.inlayHints.enumMemberValues.enabled": true, // habilita los valores de los enumerados en los hints
+    "typescript.inlayHints.variableTypes.enabled": true, // habilita los tipos de variables en los hints
+    "typescript.inlayHints.parameterTypes.enabled": true, // habilita los tipos de parámetros en los hints
+    "typescript.inlayHints.propertyDeclarationTypes.enabled": true, // habilita los tipos de propiedades en los hints
+    "workbench.colorCustomizations": {
+      "editorInlayHint.foreground": "#3a3a3a",
+      "editorInlayHint.parameterBackground": "#0b0d1348",
+      "editorInlayHint.background": "#0b0d1348",
+      "editorInlayHint.typeForeground": "#ff0080",
+      "editorInlayHint.parameterForeground": "#17B890",
+      "editorCursor.foreground": "#e6b450",
+      "editor.lineHighlightBackground": "#2903811e",
+      "editor.selectionBackground": "#6200ff2a"
+    },
+    "window.restoreWindows": "none", // deshabilita la restauración de ventanas al iniciar VS Code nuevamente
+    "zenMode.restore": false, // deshabilita la restauración del modo zen
+    "window.restoreFullscreen": false, // deshabilita la restauración de pantalla completa
+    "workbench.settings.enableNaturalLanguageSearch": false, // habilita la búsqueda de lenguaje natural
+    "workbench.tree.indent": 16, // indentación del árbol de archivos
+    "workbench.tree.renderIndentGuides": "always", // renderiza las guías de indentación
+    "workbench.list.smoothScrolling": true, // desplazamiento suave
+    "files.insertFinalNewline": true,
+    "files.trimTrailingWhitespace": true,
+    "html.autoClosingTags": true,
+    "terminal.integrated.stickyScroll.enabled": false,
+    "workbench.tree.enableStickyScroll": false,
+    "editor.stickyScroll.enabled": false,
+    "editor.cursorSmoothCaretAnimation": "on",
+    "editor.smoothScrolling": true,
+    "terminal.integrated.defaultProfile.windows": "Command Prompt",
+    "workbench.colorTheme": "GitHub Dark Colorblind (Beta)", // Tema de color
+    "workbench.iconTheme": "material-icon-theme" // Tema de iconos
+  }

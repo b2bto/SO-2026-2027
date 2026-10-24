@@ -1,0 +1,54 @@
+2. Corrige el atajo en keys.lua
+Abre el archivo:
+nvim ~/.config/awesome/keys.lua
+
+
+Busca el bloque que comienza con -- captura de pantalla y reemplázalo por este:
+
+    -- Captura de pantalla: seleccionar area y copiar al portapapeles
+    awful.key(
+        {modkey, modkey_shift}, "s",
+        function()
+            awful.spawn.with_shell([[
+                mkdir -p "$HOME/Pictures"
+                archivo="$HOME/Pictures/$(date +%Y-%m-%d-%H%M%S)-screenshot.png"
+                if scrot -s -f "$archivo"; then
+                    if [ -s "$archivo" ] && command -v xclip >/dev/null 2>&1; then
+                        xclip -selection clipboard -t image/png -i "$archivo"
+                    fi
+                fi
+            ]])
+        end,
+        {
+            description = "Capturar area y copiar imagen al portapapeles",
+            group = "Captura de pantalla"
+        }
+    ),
+
+
+
+Con esta versión:
+- Super + Shift + S te permite seleccionar un área.
+- La imagen se guarda en ~/Pictures/.
+- Si la captura se realiza correctamente y xclip está instalado, la imagen se copia al portapapeles.
+- Cada captura tiene un nombre único para evitar sobrescribir imágenes anteriores.
+3. Comprueba que estén instaladas las herramientas
+Ejecuta en Kitty:
+command -v scrot
+command -v xclip
+
+
+Si alguno de los comandos no devuelve una ruta, instala las herramientas en una distribución basada en Debian o Ubuntu:
+sudo apt update
+sudo apt install scrot xclip
+
+
+Después, comprueba que AwesomeWM pueda cargar la configuración:
+awesome -k -c ~/.config/awesome/rc.lua
+
+
+Si la validación termina correctamente, reinicia AwesomeWM con tu atajo configurado Super + Ctrl + R, o ejecuta:
+awesome-client 'awesome.restart()'
+
+
+Prueba entonces Super + Shift + S. Ten en cuenta que xclip requiere una sesión compatible con X11, como la que normalmente utiliza AwesomeWM.
