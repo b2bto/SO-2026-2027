@@ -1,0 +1,9 @@
+-- Paleta Neon
+color_black       = "#0B0D14"
+color_white       = "#E7EAF3"
+color_azul_one    = "#22D3EE"
+color_azul_two    = "#171B2A"
+color_rojo_one    = "#F472B6"
+color_morado_one  = "#171B2A"
+color_naranja_one = "#8B5CF6"
+color_yellow_one  = "#FBBF24"

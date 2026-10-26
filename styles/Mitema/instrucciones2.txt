@@ -1,0 +1,1022 @@
+Vamos a convertir tu configuración en un entorno Minimal Developer para Arch Linux + AwesomeWM, con estética oscura, barra flotante, transparencias, sombras, iconos Nerd Fonts y un sistema de temas que puedas mantener sin tener que sobrescribir archivos cada vez.
+
+Voy a conservar las funciones que ya tienes siempre que sea posible: nueve escritorios, controles de ventanas, música con MPD, menú de aplicaciones, información del sistema, bandeja, wallpaper y atajos para cambiar de tema.
+
+La diferencia principal será que separaremos la apariencia del comportamiento. Así podrás cambiar de Minimal Developer a Ruka Sarashina o Rick and Morty sin duplicar toda tu configuración.
+
+1. Diseño final
+MINIMAL / DEVELOPER
+ARCH LINUX · AWESOMEWM
+
+nvim — rc.lua
+
+Terminal · configuración · desarrollo
+
+CPU 12% · RAM 38%
+
+15:30
+
+Concepto visual ilustrativo. Los indicadores reales dependerán de los widgets instalados.
+
+2. Estructura de archivos
+La configuración quedará organizada de esta forma:
+
+
+text
+~/.config/awesome/
+├── rc.lua
+├── bar.lua
+├── keys.lua
+├── theme.lua
+├── themes/
+│   ├── minimal.lua
+│   ├── ruka.lua
+│   └── rick.lua
+├── widgets/
+│   ├── power.lua
+│   └── informacion-sistema.lua
+└── wallpaper/
+    ├── minimal.jpg
+    ├── ruka.jpg
+    └── rick.jpg
+Los archivos power.lua e informacion-sistema.lua son los que ya tienes. Los conservaremos, aunque habrá que revisar sus contenidos para asegurar que funcionen con el nuevo diseño.
+
+3. Instala las dependencias necesarias
+En Arch Linux, instala los componentes que usaremos:
+
+
+bash
+sudo pacman -S --needed \
+  awesome picom alacritty \
+  ttf-jetbrains-mono-nerd \
+  rofi feh scrot xclip \
+  playerctl mpd
+Si alguno de estos paquetes no está disponible en tus repositorios habilitados, no fuerces su instalación: revisamos la alternativa correspondiente. Para los iconos usaremos glifos de Nerd Fonts, y para las transparencias y sombras, Picom.
+
+Antes de tocar tus archivos, haz una copia de seguridad:
+
+
+bash
+mkdir -p ~/.config
+
+cp -a ~/.config/awesome \
+  ~/.config/awesome-backup-$(date +%Y%m%d-%H%M%S)
+Si el directorio aún no existe, crea la estructura inicial:
+
+
+bash
+mkdir -p ~/.config/awesome/{themes,widgets,wallpaper}
+4. Archivo themes/minimal.lua
+Este será el perfil visual principal. Crea ~/.config/awesome/themes/minimal.lua:
+
+
+lua
+
+-- themes/minimal.lua
+-- Minimal Developer: carbón, violeta y cian.
+
+local theme = {}
+
+theme.font = "JetBrainsMono Nerd Font 10"
+theme.notification_font = "JetBrainsMono Nerd Font 10"
+
+-- Paleta
+theme.bg_normal   = "#11131B"
+theme.bg_focus    = "#202436"
+theme.bg_urgent   = "#F87171"
+theme.bg_minimize = "#171A24"
+
+theme.fg_normal   = "#A8B0C5"
+theme.fg_focus    = "#F1F5F9"
+theme.fg_urgent   = "#FFFFFF"
+theme.fg_minimize = "#6B7280"
+
+theme.accent      = "#A78BFA"
+theme.cyan        = "#22D3EE"
+theme.green       = "#34D399"
+theme.yellow      = "#FBBF24"
+theme.red         = "#F87171"
+
+-- Bordes y espacios
+theme.useless_gap = 8
+theme.border_width = 2
+theme.border_normal = "#292D3E"
+theme.border_focus = theme.accent
+theme.border_marked = theme.cyan
+
+-- Barra flotante
+theme.bar_bg = "#11131BDD"
+theme.bar_fg = "#F1F5F9"
+theme.bar_height = 38
+theme.bar_margin = 12
+theme.bar_radius = 12
+
+-- Escritorios
+theme.tag_active = theme.accent
+theme.tag_occupied = "#475569"
+theme.tag_empty = "#303548"
+theme.tag_fg = "#F1F5F9"
+
+-- Tareas
+theme.task_bg = "#191D2A"
+theme.task_bg_focus = "#30364B"
+theme.task_fg = "#DCE3F2"
+
+-- Menús
+theme.menu_height = 28
+theme.menu_width = 220
+theme.menu_bg_normal = "#171A24"
+theme.menu_fg_normal = "#DCE3F2"
+theme.menu_bg_focus = "#30364B"
+theme.menu_fg_focus = "#FFFFFF"
+theme.menu_border_width = 1
+theme.menu_border_color = "#34394D"
+
+-- Icono del menú de Awesome
+theme.awesome_icon = nil
+
+-- Fondo
+theme.wallpaper = os.getenv("HOME")
+    .. "/.config/awesome/wallpaper/minimal.jpg"
+
+return theme
+5. Archivo theme.lua
+Este archivo elige el perfil activo. Crea ~/.config/awesome/theme.lua:
+
+
+lua
+
+-- theme.lua
+-- Para cambiar de perfil, sustituye "minimal"
+-- por "ruka" o "rick" y reinicia Awesome.
+
+local config_dir = os.getenv("HOME")
+    .. "/.config/awesome/"
+
+return dofile(config_dir .. "themes/minimal.lua")
+Los otros perfiles podrán utilizar exactamente la misma estructura de propiedades. Así no será necesario copiar un rc.lua diferente para cada tema.
+
+6. Archivo themes/ruka.lua
+Te dejo también una base para tu tema anime:
+
+
+lua
+
+-- themes/ruka.lua
+local theme = {}
+
+theme.font = "JetBrainsMono Nerd Font 10"
+theme.bg_normal = "#111722"
+theme.bg_focus = "#25374F"
+theme.bg_urgent = "#E879A9"
+theme.bg_minimize = "#17202D"
+
+theme.fg_normal = "#C6D6E8"
+theme.fg_focus = "#FFFFFF"
+theme.fg_urgent = "#FFFFFF"
+theme.fg_minimize = "#7C8DA5"
+
+theme.accent = "#83C5F7"
+theme.cyan = "#A5E5F5"
+theme.green = "#9ADBC5"
+theme.yellow = "#F7D9A5"
+theme.red = "#E879A9"
+
+theme.useless_gap = 8
+theme.border_width = 2
+theme.border_normal = "#26364A"
+theme.border_focus = theme.accent
+theme.border_marked = theme.cyan
+
+theme.bar_bg = "#111722DD"
+theme.bar_fg = "#F1F7FF"
+theme.bar_height = 38
+theme.bar_margin = 12
+theme.bar_radius = 12
+
+theme.tag_active = theme.accent
+theme.tag_occupied = "#526A86"
+theme.tag_empty = "#2C394B"
+theme.tag_fg = "#FFFFFF"
+
+theme.task_bg = "#17202D"
+theme.task_bg_focus = "#2C4059"
+theme.task_fg = "#E4F0FF"
+
+theme.menu_height = 28
+theme.menu_width = 220
+theme.menu_bg_normal = "#17202D"
+theme.menu_fg_normal = "#E4F0FF"
+theme.menu_bg_focus = "#2C4059"
+theme.menu_fg_focus = "#FFFFFF"
+theme.menu_border_width = 1
+theme.menu_border_color = "#526A86"
+
+theme.awesome_icon = nil
+theme.wallpaper = os.getenv("HOME")
+    .. "/.config/awesome/wallpaper/ruka.jpg"
+
+return theme
+7. Archivo themes/rick.lua
+
+lua
+
+-- themes/rick.lua
+local theme = {}
+
+theme.font = "JetBrainsMono Nerd Font 10"
+theme.bg_normal = "#101410"
+theme.bg_focus = "#202B20"
+theme.bg_urgent = "#F87171"
+theme.bg_minimize = "#151B15"
+
+theme.fg_normal = "#B9CCB4"
+theme.fg_focus = "#F3FFF0"
+theme.fg_urgent = "#FFFFFF"
+theme.fg_minimize = "#758571"
+
+theme.accent = "#A3E635"
+theme.cyan = "#5EEAD4"
+theme.green = "#A3E635"
+theme.yellow = "#FACC15"
+theme.red = "#FB7185"
+
+theme.useless_gap = 8
+theme.border_width = 2
+theme.border_normal = "#2B3B2B"
+theme.border_focus = theme.accent
+theme.border_marked = theme.cyan
+
+theme.bar_bg = "#101410DD"
+theme.bar_fg = "#F3FFF0"
+theme.bar_height = 38
+theme.bar_margin = 12
+theme.bar_radius = 12
+
+theme.tag_active = theme.accent
+theme.tag_occupied = "#50694B"
+theme.tag_empty = "#283528"
+theme.tag_fg = "#101410"
+
+theme.task_bg = "#151B15"
+theme.task_bg_focus = "#2A3B28"
+theme.task_fg = "#E6F4E1"
+
+theme.menu_height = 28
+theme.menu_width = 220
+theme.menu_bg_normal = "#151B15"
+theme.menu_fg_normal = "#E6F4E1"
+theme.menu_bg_focus = "#2A3B28"
+theme.menu_fg_focus = "#FFFFFF"
+theme.menu_border_width = 1
+theme.menu_border_color = "#50694B"
+
+theme.awesome_icon = nil
+theme.wallpaper = os.getenv("HOME")
+    .. "/.config/awesome/wallpaper/rick.jpg"
+
+return theme
+8. Archivo bar.lua
+Esta versión crea una barra superior flotante con márgenes, esquinas redondeadas, escritorios virtuales, tareas, bandeja y reloj. También intenta conservar tus widgets de información del sistema y energía.
+
+
+lua
+
+-- bar.lua
+local beautiful = require("beautiful")
+
+local function safe_widget(factory, ...)
+    if type(factory) ~= "function" then
+        return nil
+    end
+
+    local ok, result = pcall(factory, ...)
+    if ok then
+        return result
+    end
+
+    return nil
+end
+
+local function make_info(index, wibox)
+    local ok, info = pcall(require, "widget-drymnz.informacion-sistema")
+
+    if ok then
+        local widget = safe_widget(info, index)
+        if widget then
+            return widget
+        end
+    end
+
+    return wibox.widget.textbox("  --  ")
+end
+
+local function make_power()
+    local ok, power = pcall(require, "widget-drymnz.power")
+    if ok then
+        return power
+    end
+    return nil
+end
+
+local function make_taglist(awful, gears, s, buttons)
+    return awful.widget.taglist {
+        screen = s,
+        filter = awful.widget.taglist.filter.all,
+        buttons = buttons,
+        style = {
+            shape = gears.shape.rounded_rect,
+        },
+        widget_template = {
+            {
+                {
+                    id = "text_role",
+                    widget = awful.widget.textbox,
+                },
+                margins = 8,
+                widget = awful.container.margin,
+            },
+            id = "background_role",
+            widget = awful.container.background,
+            create_callback = function(self, tag)
+                self.shape = gears.shape.rounded_rect
+            end,
+            update_callback = function(self, tag)
+                local bg = beautiful.tag_empty
+
+                if tag.selected then
+                    bg = beautiful.tag_active
+                elseif #tag:clients() > 0 then
+                    bg = beautiful.tag_occupied
+                end
+
+                self.bg = bg
+                self.fg = beautiful.tag_fg
+            end,
+        },
+    }
+end
+
+local function make_tasklist(awful, gears, s, buttons)
+    return awful.widget.tasklist {
+        screen = s,
+        filter = awful.widget.tasklist.filter.currenttags,
+        buttons = buttons,
+        style = {
+            shape = gears.shape.rounded_rect,
+        },
+        layout = {
+            spacing = 6,
+            layout = require("wibox").layout.fixed.horizontal,
+        },
+        widget_template = {
+            {
+                {
+                    {
+                        id = "icon_role",
+                        widget = require("wibox").widget.imagebox,
+                    },
+                    margins = 6,
+                    widget = require("wibox").container.margin,
+                },
+                {
+                    id = "text_role",
+                    widget = require("wibox").widget.textbox,
+                },
+                spacing = 6,
+                layout = require("wibox").layout.fixed.horizontal,
+            },
+            id = "background_role",
+            widget = require("wibox").container.background,
+            create_callback = function(self)
+                self.shape = gears.shape.rounded_rect
+            end,
+            update_callback = function(self, c)
+                self.bg = c == client.focus
+                    and beautiful.task_bg_focus
+                    or beautiful.task_bg
+                self.fg = beautiful.task_fg
+            end,
+        },
+    }
+end
+
+local function setup_bar(awful, gears, wibox, s,
+                         taglist_buttons, tasklist_buttons)
+    local margin = beautiful.bar_margin or 12
+    local height = beautiful.bar_height or 38
+    local geo = s.geometry
+
+    s.mytaglist = make_taglist(
+        awful, gears, s, taglist_buttons
+    )
+
+    s.mytasklist = make_tasklist(
+        awful, gears, s, tasklist_buttons
+    )
+
+    s.mylayoutbox = awful.widget.layoutbox(s)
+    s.mylayoutbox:buttons(gears.table.join(
+        awful.button({}, 1, function()
+            awful.layout.inc(1)
+        end),
+        awful.button({}, 3, function()
+            awful.layout.inc(-1)
+        end),
+        awful.button({}, 4, function()
+            awful.layout.inc(1)
+        end),
+        awful.button({}, 5, function()
+            awful.layout.inc(-1)
+        end)
+    ))
+
+    local right_widgets = {
+        layout = wibox.layout.fixed.horizontal,
+        spacing = 10,
+        make_info(4, wibox),
+        make_info(3, wibox),
+        make_info(1, wibox),
+        make_info(2, wibox),
+        wibox.widget.textclock(
+            "  %a %d %b  %H:%M  "
+        ),
+        s.mylayoutbox,
+    }
+
+    local power = make_power()
+    if power then
+        table.insert(right_widgets, 1, power)
+    end
+
+    local systray = wibox.widget.systray()
+    local right = {
+        layout = wibox.layout.fixed.horizontal,
+        spacing = 10,
+        systray,
+        right_widgets,
+    }
+
+    s.mywibox = awful.wibar {
+        screen = s,
+        position = "top",
+        x = geo.x + margin,
+        y = geo.y + margin,
+        width = math.max(100, geo.width - margin * 2),
+        height = height,
+        bg = beautiful.bar_bg,
+        fg = beautiful.bar_fg,
+        shape = gears.shape.rounded_rect,
+        border_width = 1,
+        border_color = beautiful.border_normal,
+        ontop = true,
+    }
+
+    s.mywibox:setup {
+        layout = wibox.layout.align.horizontal,
+        {
+            layout = wibox.layout.fixed.horizontal,
+            spacing = 8,
+            s.mytaglist,
+        },
+        {
+            layout = wibox.layout.flex.horizontal,
+            s.mytasklist,
+        },
+        right,
+    }
+end
+
+return setup_bar
+Nota importante: el widget informacion-sistema es personalizado. Como no tenemos su código fuente, esta barra lo conserva de forma defensiva; si alguno de sus indicadores no se muestra, podremos adaptar ese módulo por separado. La posición flotante se calcula al crear la barra, así que después también añadiremos una actualización al cambiar la geometría de la pantalla si utilizas monitores con distintas resoluciones.
+
+9. Archivo keys.lua
+Conservaremos la tecla Windows (Mod4) como modificador principal, los controles de ventanas, los nueve escritorios y los atajos de MPD. Esta versión también corrige el cambio de foco y los movimientos de ventanas, sin depender de las variables globales de tu versión anterior.
+
+
+lua
+
+-- keys.lua
+local awful = require("awful")
+local gears = require("gears")
+
+local function setup_keys(modkey, terminal)
+    local globalkeys = gears.table.join(
+        -- Ayuda
+        awful.key({modkey}, "s", function()
+            require("awful.hotkeys_popup").show_help(
+                nil, awful.screen.focused()
+            )
+        end, { description = "Mostrar atajos", group = "Awesome" }),
+
+        -- Lanzadores
+        awful.key({modkey}, "Return", function()
+            awful.spawn(terminal)
+        end, { description = "Abrir terminal", group = "Lanzador" }),
+
+        awful.key({modkey}, "r", function()
+            awful.screen.focused().mypromptbox:run()
+        end, { description = "Ejecutar comando", group = "Lanzador" }),
+
+        awful.key({modkey}, "w", function()
+            if _G.mymainmenu then
+                _G.mymainmenu:toggle()
+            end
+        end, { description = "Menú", group = "Lanzador" }),
+
+        -- Foco y escritorios
+        awful.key({modkey, "Control"}, "Left", awful.tag.viewprev,
+            { description = "Escritorio anterior", group = "Escritorios" }),
+        awful.key({modkey, "Control"}, "Right", awful.tag.viewnext,
+            { description = "Escritorio siguiente", group = "Escritorios" }),
+
+        awful.key({modkey}, "Tab", function()
+            awful.client.focus.history.previous()
+            if client.focus then
+                client.focus:raise()
+            end
+        end, { description = "Ventana anterior", group = "Ventanas" }),
+
+        awful.key({modkey}, "space", function()
+            awful.layout.inc(1)
+        end, { description = "Siguiente distribución", group = "Diseño" }),
+
+        awful.key({modkey, "Shift"}, "space", function()
+            awful.layout.inc(-1)
+        end, { description = "Distribución anterior", group = "Diseño" }),
+
+        -- Awesome
+        awful.key({modkey, "Control"}, "r", awesome.restart,
+            { description = "Reiniciar Awesome", group = "Awesome" }),
+        awful.key({modkey, "Shift"}, "q", awesome.quit,
+            { description = "Salir de Awesome", group = "Awesome" }),
+
+        -- Captura de pantalla
+        awful.key({modkey, "Shift"}, "s", function()
+            awful.spawn.with_shell(
+                'mkdir -p "$HOME/Pictures" && ' ..
+                'scrot -s "$HOME/Pictures/screenshot-%Y%m%d-%H%M%S.png"'
+            )
+        end, { description = "Capturar una región", group = "Sistema" }),
+
+        -- Música: requiere MPD y MPC
+        awful.key({"Mod1", "Shift"}, "w", function()
+            awful.spawn.with_shell("mpc toggle")
+        end, { description = "Reproducir / pausar", group = "Música" }),
+        awful.key({"Mod1", "Shift"}, "s", function()
+            awful.spawn.with_shell("mpc next")
+        end, { description = "Siguiente canción", group = "Música" }),
+        awful.key({"Mod1", "Shift"}, "a", function()
+            awful.spawn.with_shell("mpc prev")
+        end, { description = "Canción anterior", group = "Música" }),
+        awful.key({"Mod1", "Shift"}, "x", function()
+            awful.spawn.with_shell("mpc volume -3")
+        end, { description = "Bajar volumen de MPD", group = "Música" }),
+        awful.key({"Mod1", "Shift"}, "z", function()
+            awful.spawn.with_shell("mpc volume +3")
+        end, { description = "Subir volumen de MPD", group = "Música" }),
+
+        -- Menubar
+        awful.key({modkey}, "p", function()
+            require("menubar").show()
+        end, { description = "Lanzador de aplicaciones", group = "Lanzador" })
+    )
+
+    local clientkeys = gears.table.join(
+        awful.key({modkey}, "f", function(c)
+            c.fullscreen = not c.fullscreen
+            c:raise()
+        end, { description = "Pantalla completa", group = "Ventanas" }),
+
+        awful.key({modkey, "Shift"}, "c", function(c)
+            c:kill()
+        end, { description = "Cerrar ventana", group = "Ventanas" }),
+
+        awful.key({modkey}, "m", function(c)
+            c.maximized = not c.maximized
+            c:raise()
+        end, { description = "Maximizar", group = "Ventanas" }),
+
+        awful.key({modkey}, "n", function(c)
+            c.minimized = true
+        end, { description = "Minimizar", group = "Ventanas" }),
+
+        awful.key({modkey, "Control"}, "space",
+            awful.client.floating.toggle,
+            { description = "Alternar flotante", group = "Ventanas" }),
+
+        awful.key({modkey}, "t", function(c)
+            c.ontop = not c.ontop
+        end, { description = "Mantener encima", group = "Ventanas" }),
+
+        awful.key({modkey, "Control"}, "Return", function(c)
+            c:swap(awful.client.getmaster())
+        end, { description = "Convertir en ventana principal", group = "Ventanas" })
+    )
+
+    -- Cambiar el foco con Mod4 + flechas.
+    globalkeys = gears.table.join(
+        globalkeys,
+        awful.key({modkey}, "Left", function()
+            awful.client.focus.byidx(-1)
+            if client.focus then client.focus:raise() end
+        end, { description = "Foco anterior", group = "Ventanas" }),
+        awful.key({modkey}, "Right", function()
+            awful.client.focus.byidx(1)
+            if client.focus then client.focus:raise() end
+        end, { description = "Foco siguiente", group = "Ventanas" })
+    )
+
+    -- Atajos de escritorios 1 a 9.
+    for i = 1, 9 do
+        globalkeys = gears.table.join(globalkeys,
+            awful.key({modkey}, "#" .. (i + 9), function()
+                local tag = awful.screen.focused().tags[i]
+                if tag then tag:view_only() end
+            end, {
+                description = "Ir al escritorio " .. i,
+                group = "Escritorios",
+            }),
+
+            awful.key({modkey, "Shift"}, "#" .. (i + 9), function()
+                if client.focus then
+                    local tag = client.focus.screen.tags[i]
+                    if tag then
+                        client.focus:move_to_tag(tag)
+                        tag:view_only()
+                    end
+                end
+            end, {
+                description = "Mover ventana al escritorio " .. i,
+                group = "Escritorios",
+            })
+        )
+    end
+
+    return globalkeys, clientkeys
+end
+
+return setup_keys
+Nota: el atajo de captura guarda la imagen en ~/Pictures. El control de música sigue usando MPD/MPC como en tu configuración original; no es un control de volumen general del sistema.
+
+10. Archivo principal rc.lua
+Este archivo integra el tema, las ventanas, los escritorios, los menús, la barra y los procesos de inicio.
+
+
+lua
+
+-- rc.lua
+-- Arch Linux + AwesomeWM
+-- Minimal Developer
+
+pcall(require, "luarocks.loader")
+
+local gears = require("gears")
+local awful = require("awful")
+local wibox = require("wibox")
+local beautiful = require("beautiful")
+local naughty = require("naughty")
+local menubar = require("menubar")
+
+require("awful.autofocus")
+require("awful.hotkeys_popup.keys")
+
+local config_dir = gears.filesystem.get_configuration_dir()
+
+-- Tema activo
+local theme = dofile(config_dir .. "theme.lua")
+beautiful.init(theme)
+
+local modkey = "Mod4"
+local terminal = "alacritty"
+local editor = os.getenv("EDITOR") or "nvim"
+local editor_cmd = terminal .. " -e " .. editor
+
+menubar.utils.terminal = terminal
+
+-- Errores de inicio
+if awesome.startup_errors then
+    naughty.notify({
+        preset = naughty.config.presets.critical,
+        title = "Error al iniciar Awesome",
+        text = tostring(awesome.startup_errors),
+    })
+end
+
+do
+    local in_error = false
+
+    awesome.connect_signal("debug::error", function(err)
+        if in_error then return end
+        in_error = true
+
+        naughty.notify({
+            preset = naughty.config.presets.critical,
+            title = "Error de Awesome",
+            text = tostring(err),
+        })
+
+        in_error = false
+    end)
+end
+
+-- Distribuciones de ventanas
+awful.layout.layouts = {
+    awful.layout.suit.tile,
+    awful.layout.suit.fair,
+    awful.layout.suit.floating,
+    awful.layout.suit.max,
+}
+
+-- Menú principal
+local awesome_menu = {
+    { "Atajos", function()
+        require("awful.hotkeys_popup").show_help(
+            nil, awful.screen.focused()
+        )
+    end },
+    { "Editar configuración", editor_cmd .. " " .. awesome.conffile },
+    { "Reiniciar Awesome", awesome.restart },
+    { "Salir", awesome.quit },
+}
+
+local browser_menu = {
+    { "Firefox", "firefox" },
+}
+
+mymainmenu = awful.menu({
+    items = {
+        { "Awesome", awesome_menu },
+        { "Navegador", browser_menu },
+        { "Terminal", terminal },
+        { "Archivos", "thunar" },
+    },
+    theme = {
+        height = beautiful.menu_height,
+        width = beautiful.menu_width,
+        bg_normal = beautiful.menu_bg_normal,
+        fg_normal = beautiful.menu_fg_normal,
+        bg_focus = beautiful.menu_bg_focus,
+        fg_focus = beautiful.menu_fg_focus,
+        border_width = beautiful.menu_border_width,
+        border_color = beautiful.menu_border_color,
+    },
+})
+
+-- Prompt para ejecutar comandos
+local function create_prompt(s)
+    s.mypromptbox = awful.widget.prompt()
+end
+
+-- Fondo de pantalla
+local function set_wallpaper(s)
+    if beautiful.wallpaper
+        and gears.filesystem.file_readable(beautiful.wallpaper)
+    then
+        gears.wallpaper.maximized(
+            beautiful.wallpaper, s, true
+        )
+    else
+        gears.wallpaper.set(beautiful.bg_normal, s)
+    end
+end
+
+-- Botones de escritorios
+local taglist_buttons = gears.table.join(
+    awful.button({}, 1, function(t)
+        t:view_only()
+    end),
+    awful.button({modkey}, 1, function(t)
+        if client.focus then
+            client.focus:move_to_tag(t)
+        end
+    end),
+    awful.button({}, 3, awful.tag.viewtoggle),
+    awful.button({}, 4, function(t)
+        awful.tag.viewnext(t.screen)
+    end),
+    awful.button({}, 5, function(t)
+        awful.tag.viewprev(t.screen)
+    end)
+)
+
+-- Botones de tareas
+local tasklist_buttons = gears.table.join(
+    awful.button({}, 1, function(c)
+        if c == client.focus then
+            c.minimized = true
+        else
+            c:emit_signal("request::activate", "tasklist", {
+                raise = true,
+            })
+        end
+    end),
+    awful.button({}, 3, function()
+        awful.menu.client_list({ theme = { width = 250 } })
+    end),
+    awful.button({}, 4, function()
+        awful.client.focus.byidx(1)
+    end),
+    awful.button({}, 5, function()
+        awful.client.focus.byidx(-1)
+    end)
+)
+
+-- Botones del ratón para ventanas
+local clientbuttons = gears.table.join(
+    awful.button({}, 1, function(c)
+        c:emit_signal("request::activate", "mouse_click", {
+            raise = true,
+        })
+    end),
+    awful.button({modkey}, 1, function(c)
+        c:emit_signal("request::activate", "mouse_click", {
+            raise = true,
+        })
+        awful.mouse.client.move(c)
+    end),
+    awful.button({modkey}, 3, function(c)
+        c:emit_signal("request::activate", "mouse_click", {
+            raise = true,
+        })
+        awful.mouse.client.resize(c)
+    end)
+)
+
+-- Nueve escritorios por pantalla
+awful.screen.connect_for_each_screen(function(s)
+    awful.tag(
+        { "1", "2", "3", "4", "5", "6", "7", "8", "9" },
+        s,
+        awful.layout.layouts[1]
+    )
+
+    s.padding = beautiful.useless_gap or 8
+    create_prompt(s)
+    set_wallpaper(s)
+
+    local setup_bar = require("bar")
+    setup_bar(
+        awful, gears, wibox, s,
+        taglist_buttons, tasklist_buttons
+    )
+end)
+
+-- Actualizar fondo al cambiar la geometría de pantalla
+screen.connect_signal("property::geometry", function(s)
+    set_wallpaper(s)
+end)
+
+-- Atajos de teclado
+local setup_keys = require("keys")
+local globalkeys, clientkeys = setup_keys(modkey, terminal)
+root.keys(globalkeys)
+
+root.buttons(gears.table.join(
+    awful.button({}, 3, function()
+        mymainmenu:toggle()
+    end),
+    awful.button({}, 4, awful.tag.viewnext),
+    awful.button({}, 5, awful.tag.viewprev)
+))
+
+-- Reglas de ventanas
+awful.rules.rules = {
+    {
+        rule = {},
+        properties = {
+            border_width = beautiful.border_width,
+            border_color = beautiful.border_normal,
+            focus = awful.client.focus.filter,
+            raise = true,
+            keys = clientkeys,
+            buttons = clientbuttons,
+            screen = awful.screen.preferred,
+            placement = awful.placement.no_overlap
+                + awful.placement.no_offscreen,
+            size_hints_honor = false,
+        },
+    },
+    {
+        rule_any = {
+            type = { "dialog" },
+        },
+        properties = {
+            floating = true,
+        },
+    },
+}
+
+-- Estado visual de las ventanas
+client.connect_signal("focus", function(c)
+    c.border_color = beautiful.border_focus
+end)
+
+client.connect_signal("unfocus", function(c)
+    c.border_color = beautiful.border_normal
+end)
+
+-- Inicio de aplicaciones: evita duplicados detectables
+local function run_once(process, command)
+    awful.spawn.with_shell(
+        "pgrep -x '" .. process ..
+        "' >/dev/null || " .. command
+    )
+end
+
+run_once("picom", "picom")
+run_once("mpd", "mpd")
+
+-- Polkit: configura aquí el agente instalado en tu sistema.
+-- No todos los equipos Arch utilizan la misma ruta.
+
+-- Bandeja del sistema
+beautiful.bg_systray = beautiful.bar_bg
+Dos correcciones necesarias antes de instalar
+En el código de bar.lua, las referencias awful.container.margin y awful.container.background deben ser wibox.container.margin y wibox.container.background. Asimismo, usa wibox.widget.textbox en lugar de awful.widget.textbox. Son los módulos correctos para esos contenedores y widgets.
+
+En keys.lua, el atajo para ejecutar comandos accede a s.mypromptbox, pero la función awful.screen.focused().mypromptbox:run() puede necesitar que se enfoque la pantalla que contiene el prompt. Si ese atajo falla en tu versión, podemos ajustarlo; no afecta al resto de la configuración.
+
+11. Configura Picom para obtener transparencias y sombras
+Crea el archivo ~/.config/picom/picom.conf:
+
+
+ini
+
+backend = "glx";
+vsync = true;
+
+shadow = true;
+shadow-radius = 18;
+shadow-opacity = 0.30;
+shadow-offset-x = -8;
+shadow-offset-y = -8;
+shadow-color = "#000000";
+
+fading = true;
+fade-in-step = 0.04;
+fade-out-step = 0.04;
+
+inactive-opacity = 0.94;
+active-opacity = 1.0;
+frame-opacity = 0.92;
+
+corner-radius = 12;
+
+detect-rounded-corners = true;
+detect-client-opacity = true;
+use-damage = true;
+La disponibilidad de opciones como corner-radius depende de la versión y compilación de Picom. Si una opción no es reconocida, consulta picom --help y los ejemplos de configuración de tu paquete.
+
+Para aplicar los cambios, reinicia Picom después de comprobar que tu configuración es válida. No inicies una segunda instancia si ya está ejecutándose.
+
+12. Valida la instalación
+Antes de reiniciar Awesome, aplica la pequeña corrección de nombres de módulos indicada para bar.lua:
+
+
+bash
+sed -i \
+  -e 's/awful\.container/wibox.container/g' \
+  -e 's/awful\.widget\.textbox/wibox.widget.textbox/g' \
+  ~/.config/awesome/bar.lua
+Luego ejecuta:
+
+
+bash
+awesome -k
+Si el resultado indica que la configuración es válida, reinicia Awesome con Mod4 + Ctrl + R.
+
+Si falla, no cierres tu terminal ni tu sesión gráfica. Corrige primero el error que indique el validador.
+
+13. Cómo cambiar de tema
+Para activar Ruka Sarashina, edita ~/.config/awesome/theme.lua y cambia:
+
+
+lua
+return dofile(config_dir .. "themes/minimal.lua")
+por:
+
+
+lua
+return dofile(config_dir .. "themes/ruka.lua")
+Para Rick and Morty, utiliza themes/rick.lua.
+
+Guarda el archivo y reinicia Awesome. El tema se carga al iniciar, por lo que no tienes que sobrescribir rc.lua, bar.lua ni keys.lua.
+
+Asegúrate de colocar los wallpapers en las rutas que define cada perfil. Si no tienes todavía esas imágenes, el entorno usará el fondo de respaldo.
+
+14. Recuperación si algo sale mal
+Si Awesome no inicia correctamente, cambia a una TTY con Ctrl + Alt + F3, inicia sesión y restaura la copia de seguridad que creaste. Primero identifica el nombre exacto de la carpeta:
+
+
+bash
+ls -dt ~/.config/awesome-backup-* | head -n 5
+Después sustituye /ruta/a/la/copia por la carpeta correcta:
+
+
+bash
+mv ~/.config/awesome ~/.config/awesome-fallida
+cp -a /ruta/a/la/copia ~/.config/awesome
+Puedes regresar a tu sesión gráfica con Ctrl + Alt + F1 o la combinación que utilice tu sistema.
+
+Mi recomendación: implementa primero el perfil Minimal, comprueba que la barra y los atajos funcionan y después ajustamos los detalles estéticos. Los módulos widget-drymnz.power e informacion-sistema son personalizados, así que para garantizar una versión realmente lista para usar necesito revisar también esos dos archivos, especialmente cómo construyen sus widgets y qué dependencias utilizan.
